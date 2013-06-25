@@ -1,0 +1,108 @@
+\documentclass[a4paper,oneside,openany]{tufte-book}
+\usepackage[utf8x]{inputenc}
+\usepackage[german]{babel}
+\usepackage{microtype} % Improves character and word spacing
+\usepackage{booktabs} % Better horizontal rules in tables
+\usepackage{ucs}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{caption}
+
+\makeatletter% since we're using commands with @ in their name
+
+\let\origappendix\appendix% save a copy of the original meaning of \appendix
+\renewcommand{\appendix}{%
+  \origappendix% do all the original \appendix stuff
+  \titlecontents{chapter}%
+    [0em] % distance from left margin
+    {\vspace{1.5\baselineskip}\begin{fullwidth}\LARGE\rmfamily\itshape} % above (global formatting of entry)
+    {\hspace*{0em}\appendixname~\thecontentslabel: } % before w/label (label = ``2'')
+    {\hspace*{0em}} % before w/o label
+    {\rmfamily\upshape\qquad\thecontentspage} % filler + page (leaders and page num)
+    [\end{fullwidth}] % after
+  \titleformat{\chapter}%
+    [display]% shape
+    {\relax\ifthenelse{\NOT\boolean{@tufte@symmetric}}{\begin{fullwidth}}{}}% format applied to label+text
+    {\itshape\huge Anhang~\thechapter}% label
+    {0pt}% horizontal separation between label and title body
+    {\huge\rmfamily\itshape}% before the title body
+    [\ifthenelse{\NOT\boolean{@tufte@symmetric}}{\end{fullwidth}}{}]% after the title body
+  \setcounter{secnumdepth}{0}% ``number'' the appendices
+  \renewcommand{\thefigure}{\@arabic\c@figure}% define \thefigure to use only the figure number (1), not A.1
+  \renewcommand{\thetable}{\@arabic\c@table}%
+  %
+  % Add any other special appendix-related code here.
+  %
+}
+\makeatother% restore the special meaning of @
+
+
+\author{Schett Matthias}
+\title{SEN-\"{U}bung 3}
+
+\begin{document}
+
+\definecolor{gray}{rgb}{0.9,0.9,0.9} % background color for the listings
+
+\lstset{language=[Visual]Basic, morekeywords={param, local}, breaklines=true, tabsize=4, showstringspaces=false,backgroundcolor=\color{gray}, numbers=left,
+    basicstyle=\ttfamily} % standard listing settings
+
+\frontmatter
+
+\maketitle
+\tableofcontents
+\mainmatter
+
+\chapter{Aufgabe 1}
+
+\section{L\"{o}sungsidee}
+
+Die Object Klasse dient nur als Basisklasse und verfügt nur einen Konstruktor der leer ist und über einen rein virtuellen Destruktor\sidenote{Dadurch wird Objekt zu einer abstrakten Klasse gemacht.}.
+Die Klasse GraphicObject erbt public von Object und verfügt über 4 virtuelle Methoden, 2 davon sind wieder rein virtuell\sidenote{Dadurch wird auch GraphicObject zu einer abstrakten Klasse}.
+
+\begin{itemize}
+	\item void draw(); ist rein virtuell muss also in einer abgeleiteten Klasse überschrieben werden.
+	\item TBox getBoundingBox() ist ebenfalls rein virtuell.\sidenote{Rein virtuell, da die Basisklasse nicht wissen kann, wie abgeleitete Klasse gezeichnet werden oder ihren Rahmen ermitteln.}
+	\item getPositionHelper() const; wird benutzt falls eine abgeleitete Klasse ihre Implementierung für das Ermitteln der Position verändern will - ist protected
+	\item moveToHelper(TCoord const\& position); gilt das gleiche wie bei getPositonHelper();
+\end{itemize}
+
+Weiters gibt es moveTo(TCoord const\& position) und getPositon(); diese beiden Methoden sind inline deklariert und rufen nur die Helper Methoden auf. Dadurch wird gewährleistet, dass es immer eine Standardimplementierung gibt
+und Kunde nicht vergessen, die virutellen Methoden zu überschreiben.
+
+In den abgeleiteten Klassen gibt es nur Implementierugen für die virutellen Methoden draw() und getBoundingBox(), die restlichen Methoden werden übernommen.
+
+Die Klasse Picture wiederum ist ein Spezialfall. Sie verfügt über einen std::vector als Member der GraphicObject* aufnehmen kann, dadurch kann sie alles aufnehmen dass von GraphicObject ableitet, also auch weitere Pictures.
+Die weiteren Funktionen rufen in Schleifen, die jeweilige Methode der im std::vector befindlichen Objekte auf.
+
+\section{Testf\"{a}lle}
+\lstinputlisting[caption=Testausgabe]{GraphicObject/OutputA1.txt}
+
+\backmatter
+
+\appendix
+
+\setboolean{@mainmatter}{true}
+\chapter{Aufgabe 1}\label{chap:Auf1}
+
+\begin{fullwidth}
+\lstinputlisting[caption=Typdefs]{GraphicObject/Types.h}
+\lstinputlisting[caption=Object Header]{GraphicObject/Object.h}
+\lstinputlisting[caption=GraphicObject Header]{GraphicObject/GraphicObject.h}
+\lstinputlisting[caption=GraphicObject Implementierung]{GraphicObject/GraphicObject.cpp}
+\lstinputlisting[caption=Line Header]{GraphicObject/Line.h}
+\lstinputlisting[caption=Line Implementierung]{GraphicObject/Line.cpp}
+\lstinputlisting[caption=Rectangle Header]{GraphicObject/Rectangle.h}
+\lstinputlisting[caption=Rectangle Implementierung]{GraphicObject/Rectangle.cpp}
+\lstinputlisting[caption=Circle Header]{GraphicObject/Circle.h}
+\lstinputlisting[caption=Circle Implementierung]{GraphicObject/Circle.cpp}
+\lstinputlisting[caption=Picture Header]{GraphicObject/Picture.h}
+\lstinputlisting[caption=Picture Implementierung]{GraphicObject/Picture.cpp}
+\lstinputlisting[caption=Testtreiber]{GraphicObject/Main.cpp}
+\end{fullwidth}
+
+\end{document}

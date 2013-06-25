@@ -1,0 +1,23 @@
+Line::draw() begins at (2,3) goes until (3,5)
+Line::boundingbox((2,3),(3,5))
+
+Rectangle::draw() has corner at(4,5) another corner at (9,8)
+Rectangle::boundingbox((4,5),(9,8))
+
+Circle::draw() middle at (10,11) with radius 15
+Circle::boundingbox((10,11),(25,11))
+
+Picture Test
+Line::draw() begins at (2,3) goes until (3,5)
+Rectangle::draw() has corner at(4,5) another corner at (9,8)
+Circle::draw() middle at (10,11) with radius 15
+Circle::draw() middle at (67,17) with radius 6
+Picture::boundingbox((67,17),(73,17))
+
+Picture in Picture Test
+Line::draw() begins at (2,3) goes until (3,5)
+Line::draw() begins at (2,3) goes until (3,5)
+Rectangle::draw() has corner at(4,5) another corner at (9,8)
+Circle::draw() middle at (10,11) with radius 15
+Circle::draw() middle at (67,17) with radius 6
+Picture::boundingbox((10,11),(25,11))
